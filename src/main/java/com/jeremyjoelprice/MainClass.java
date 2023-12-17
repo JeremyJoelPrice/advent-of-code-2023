@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 public class MainClass {
 	public static void main(String[] args) {
-		printSolution(new Day1(), "src/main/resources/puzzle-input/1-1.txt", null);
+		printSolution(new Day1(), "src/main/resources/puzzle-input/1-1.txt", "src/main/resources/puzzle-input/1-1.txt");
 	}
 	
 	private static void printSolution(Solution solution, String inputFilePathOne, String inputFilePathTwo) {

@@ -50,6 +50,63 @@ class Day1Test {
 	@Nested
 	@DisplayName("Solution 2")
 	class Solution2 {
-	
+		@Test
+		@DisplayName("concatenates first and last worded digits in a given string")
+		void concatenatesFirstAndLastWordedDigitsInAGivenString() {
+			assertAll(
+					() -> assertEquals("12", solution.second("onetwo"))
+					, () -> assertEquals("32", solution.second("threetwo"))
+					, () -> assertEquals("32", solution.second("athreetwo"))
+					, () -> assertEquals("32", solution.second("threetwoa"))
+					, () -> assertEquals("32", solution.second("threeatwo"))
+					, () -> assertEquals("32", solution.second("threeonetwo"))
+					, () -> assertEquals("83", solution.second("eightwothree"))
+					, () -> assertEquals("83", solution.second("eightwothree"))
+					, () -> assertEquals("29", solution.second("two1nine"))
+			);
+		}
+		
+		@Test
+		@DisplayName("concatenates first and last numerical digits in a given string")
+		void concatenatesFirstAndLastNumericalDigitsInAGivenString() {
+			assertAll(
+					() -> assertEquals("12", solution.second("1abc2"))
+					, () -> assertEquals("34", solution.first("3abc4"))
+					, () -> assertEquals("34", solution.first("a3bc4d"))
+			);
+		}
+		
+		@Test
+		@DisplayName("concatenates a mixture of worded and numerical digits in a given string")
+		void concanatesAMixtureOfWordedAndNumericalDigitsInAGivenString() {
+			assertAll(
+					() -> assertEquals("72", solution.second("75ntphbdbpgktwo"))
+			);
+		}
+		
+		@Test
+		@DisplayName("counts overlapping worded digits")
+		void ignoresOverlappingWordedDigits() {
+			assertAll(
+					() -> assertEquals("18", solution.second("zoneight"))
+			);
+		}
+		
+		@Test
+		@DisplayName("concatenate and sum first and last digits of a given multi-line string")
+		void concatenateAndSumFirstAndLastDigitsOfAGivenMultiLineString() {
+			String multiLine = """
+					two1nine
+					eightwothree
+					abcone2threexyz
+					xtwone3four
+					4nineeightseven2
+					zoneight234
+					7pqrstsixteen""";
+			
+			assertAll(
+					() -> assertEquals("281", solution.second(multiLine))
+			);
+		}
 	}
 }
