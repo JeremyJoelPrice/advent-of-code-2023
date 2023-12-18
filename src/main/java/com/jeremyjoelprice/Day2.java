@@ -5,20 +5,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day2 extends Solution {
-	private int red;
-	private int green;
-	private int blue;
+	
+	private DiceBag diceBag;
+	
+	public Day2() {
+		diceBag = new DiceBag(0, 0, 0);
+	}
 	
 	public Day2(int red, int green, int blue) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
+		diceBag = new DiceBag(red, green, blue);
 	}
 	
 	@Override
 	String first(String input) {
 		int sum = Arrays.stream(input.split("\n"))
-				.map(this::parseGame)
+				.map(Game::new)
 				.filter(this::isGamePossible)
 				.mapToInt(game -> game.id).sum();
 		
@@ -27,59 +28,43 @@ public class Day2 extends Solution {
 	
 	@Override
 	String second(String input) {
-		return null;
+		return String.valueOf(Arrays.stream(input.split("\n"))
+				.map(Game::new)
+				.mapToInt(game -> getRequiredDice(game).power())
+				.sum());
+	}
+	
+	private DiceBag getRequiredDice(Game game) {
+		DiceBag diceBag = new DiceBag(0, 0, 0);
+		for (int i = 0; i < game.rounds.length; i++) {
+			Round round = game.rounds[i];
+			diceBag.red = round.red > diceBag.red ? round.red : diceBag.red;
+			diceBag.green = round.green > diceBag.green ? round.green : diceBag.green;
+			diceBag.blue = round.blue > diceBag.blue ? round.blue : diceBag.blue;
+		}
+		return diceBag;
 	}
 	
 	private boolean isGamePossible(Game game) {
 		for (int i = 0; i < game.rounds.length; i++) {
 			Round round = game.rounds[i];
-			if (round.red > this.red || round.green > this.green || round.blue > this.blue) return false;
+			if (round.red > diceBag.red || round.green > diceBag.green || round.blue > diceBag.blue) return false;
 		}
 		return true;
-	}
-	
-	private Game parseGame(String gameString) {
-		Matcher matcher = Pattern.compile("Game\s(\\d+)").matcher(gameString);
-		matcher.find();
-		int id = Integer.parseInt(matcher.group(1));
-		
-		Round[] rounds = Arrays.stream(gameString.split(";"))
-				.map(this::parseRound)
-				.toArray(Round[]::new);
-		return new Game(id, rounds);
-	}
-	
-	private Round parseRound(String roundString) {
-		Round round = new Round(0, 0, 0);
-		Matcher matcher;
-		// extract red
-		matcher = Pattern.compile("(\\d+)\sred").matcher(roundString);
-		if (matcher.find()) {
-			round.red = Integer.parseInt(matcher.group(1));
-		}
-		
-		// extract green
-		matcher = Pattern.compile("(\\d+)\sgreen").matcher(roundString);
-		if (matcher.find()) {
-			round.green = Integer.parseInt(matcher.group(1));
-		}
-		
-		// extract blue
-		matcher = Pattern.compile("(\\d+)\sblue").matcher(roundString);
-		if (matcher.find()) {
-			round.blue = Integer.parseInt(matcher.group(1));
-		}
-		
-		return round;
 	}
 	
 	private class Game {
 		int id;
 		Round[] rounds;
 		
-		public Game(int id, Round[] rounds) {
-			this.id = id;
-			this.rounds = rounds;
+		Game(String gameString) {
+			Matcher matcher = Pattern.compile("Game\s(\\d+)").matcher(gameString);
+			matcher.find();
+			this.id = Integer.parseInt(matcher.group(1));
+			
+			this.rounds = Arrays.stream(gameString.split(";"))
+					.map(Round::new)
+					.toArray(Round[]::new);
 		}
 	}
 	
@@ -88,10 +73,45 @@ public class Day2 extends Solution {
 		int green;
 		int blue;
 		
-		public Round(int red, int green, int blue) {
+		Round(String roundString) {
+			Matcher matcher;
+			// extract red
+			matcher = Pattern.compile("(\\d+)\sred").matcher(roundString);
+			if (matcher.find()) {
+				this.red = Integer.parseInt(matcher.group(1));
+			}
+			
+			// extract green
+			matcher = Pattern.compile("(\\d+)\sgreen").matcher(roundString);
+			if (matcher.find()) {
+				this.green = Integer.parseInt(matcher.group(1));
+			}
+			
+			// extract blue
+			matcher = Pattern.compile("(\\d+)\sblue").matcher(roundString);
+			if (matcher.find()) {
+				this.blue = Integer.parseInt(matcher.group(1));
+			}
+		}
+	}
+	
+	private class DiceBag {
+		int red;
+		int green;
+		int blue;
+		
+		DiceBag(int red, int green, int blue) {
 			this.red = red;
 			this.green = green;
 			this.blue = blue;
+		}
+		
+		int power() {
+			if (red == 0 && green == 0 && blue == 0) return 0;
+			int power = red == 0 ? 1 : red;
+			power *= green == 0 ? 1 : green;
+			power *= blue == 0 ? 1 : blue;
+			return power;
 		}
 	}
 }
