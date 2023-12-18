@@ -9,7 +9,6 @@ public class Day2 extends Solution {
 	private DiceBag diceBag;
 	
 	public Day2() {
-		diceBag = new DiceBag(0, 0, 0);
 	}
 	
 	public Day2(int red, int green, int blue) {
@@ -18,6 +17,7 @@ public class Day2 extends Solution {
 	
 	@Override
 	String first(String input) {
+		diceBag = diceBag == null ? new DiceBag(12, 13, 14) : diceBag;
 		int sum = Arrays.stream(input.split("\n"))
 				.map(Game::new)
 				.filter(this::isGamePossible)
