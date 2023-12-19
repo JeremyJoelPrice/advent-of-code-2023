@@ -47,7 +47,6 @@ public class Day3 extends Solution {
 	
 	private boolean isSymbol(String str) {
 		Matcher symbolMatcher = Pattern.compile("[^\\d.]").matcher(str);
-		boolean result = symbolMatcher.find();
-		return result;
+		return symbolMatcher.find();
 	}
 }

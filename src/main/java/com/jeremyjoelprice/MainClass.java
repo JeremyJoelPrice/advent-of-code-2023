@@ -12,7 +12,6 @@ public class MainClass {
 	}
 	
 	private static void printSolution(Solution solution, String inputFilePathOne, String inputFilePathTwo) {
-		Path path = Path.of(inputFilePathOne);
 		try {
 			String contents = Files.readString(Path.of(inputFilePathOne));
 			System.out.println(solution.first(contents));
