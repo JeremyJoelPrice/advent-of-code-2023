@@ -8,7 +8,7 @@ public class MainClass {
 	public static void main(String[] args) {
 		printSolution(new Day1(), "src/main/resources/puzzle-input/1-1.txt", "src/main/resources/puzzle-input/1-1.txt");
 		printSolution(new Day2(), "src/main/resources/puzzle-input/2-1.txt", "src/main/resources/puzzle-input/2-1.txt");
-		printSolution(new Day3(), "src/main/resources/puzzle-input/3-1.txt", null);
+		printSolution(new Day3(), "src/main/resources/puzzle-input/3-1.txt", "src/main/resources/puzzle-input/3-1.txt");
 	}
 	
 	private static void printSolution(Solution solution, String inputFilePathOne, String inputFilePathTwo) {
