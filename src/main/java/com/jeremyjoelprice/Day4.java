@@ -11,14 +11,29 @@ public class Day4 extends Solution {
 				.toArray(Card[]::new);
 		int value = 0;
 		for (int i = 0; i < cards.length; i++) {
-			value += cards[i].getValue();
+			value += cards[i].value;
 		}
 		return String.valueOf(value);
 	}
 	
+	CardCount[] cardCounts;
+	
 	@Override
 	String second(String input) {
-		return null;
+		cardCounts = Arrays.stream(input.split("\n"))
+				.map(row -> new CardCount(parseAsCard(row)))
+				.toArray(CardCount[]::new);
+		
+		for (int i = 0; i < cardCounts.length; i++) {
+			CardCount current = cardCounts[i];
+			for (int count = 0; count < current.count; count++) {
+				for (int wins = 0; wins < current.card.numOfWins; wins++) {
+					cardCounts[wins + i + 1].count++;
+				}
+			}
+		}
+		
+		return String.valueOf(Arrays.stream(cardCounts).reduce(0, (sum, cardCount) -> sum + cardCount.count, Integer::sum));
 	}
 	
 	private Card parseAsCard(String input) {
@@ -29,23 +44,33 @@ public class Day4 extends Solution {
 	private class Card {
 		List<String> winningNumbers;
 		List<String> revealedNumbers;
+		int value = 0;
+		private int numOfWins = 0;
 		
 		public Card(List<String> winningNumbers, List<String> revealedNumbers) {
 			this.winningNumbers = winningNumbers;
 			this.revealedNumbers = revealedNumbers;
-		}
-		
-		private int value = 0;
-		
-		int getValue() {
+			
 			revealedNumbers.stream().forEach((num) -> {
-				if (winningNumbers.contains(num)) incrementValue();
+				if (winningNumbers.contains(num)) numOfWins++;
 			});
-			return value;
+			
+			for (int i = 0; i < numOfWins; i++) {
+				incrementValue();
+			}
 		}
 		
 		void incrementValue() {
 			value = value == 0 ? 1 : value * 2;
+		}
+	}
+	
+	private class CardCount {
+		Card card;
+		int count = 1;
+		
+		public CardCount(Card card) {
+			this.card = card;
 		}
 	}
 }
