@@ -10,6 +10,7 @@ public class MainClass {
 		printSolution(new Day2(), "2");
 		printSolution(new Day3(), "3");
 		printSolution(new Day4(), "4");
+		printSolution(new Day5(), "5");
 	}
 	
 	private static void printSolution(Solution solution, String inputFileName) {
